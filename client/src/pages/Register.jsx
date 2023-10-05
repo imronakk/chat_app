@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
+import axios from 'axios'
 
 import logo from '../assets/logo.svg'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { registerRoute } from '../utils/APIRoutes';
 
 const Register = () => {
 
@@ -13,9 +17,50 @@ const Register = () => {
     confirmpwd: "",
   });
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    alert("Done!")
+  const toastOptions = {
+    position: 'bottom-right',
+    autoClose: 8000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: 'dark'
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if(handleValidation()){
+      const { name, email, password, confirmpwd } = value;
+      const {data} = await axios.post(registerRoute,{
+        name,
+        email,
+        password
+      })
+      if(data.status === false){
+        return toast.error(data.msg , toastOptions)
+      }
+      if(data.status === true){
+        localStorage.setItem('chat-app-user', JSON.stringify(data.user))
+      }
+    }
+  }
+
+  const handleValidation = () => {
+    const { name, email, password, confirmpwd } = value;
+
+    if (password !== confirmpwd) {
+      toast.error("Password and Confirm Password should be the same. ", toastOptions);
+      return false;
+    } else if (name.length < 3) {
+      toast.error("User Name should be greater than 3 characters. ", toastOptions);
+      return false;
+    } else if (email === '') {
+      toast.error("Email is Required. ", toastOptions);
+      return false;
+    } else if (password.length < 5) {
+      toast.error("Password should be greater than 5 characters. ", toastOptions);
+      return false;
+    }else{
+    return true;
+    }
   }
 
 
@@ -26,7 +71,7 @@ const Register = () => {
   return (
     <>
       <FormContainer>
-        <form onSubmit={(event) => handleSubmit(event)}>
+        <form action="" onSubmit={(e) => handleSubmit(e)}>
 
           <div className="brand">
             <img src={logo} alt="" />
@@ -42,6 +87,7 @@ const Register = () => {
           <span>Alredy Have an Account ? <Link to="/login">Login</Link></span>
         </form>
       </FormContainer>
+      <ToastContainer />
     </>
   )
 }
