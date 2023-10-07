@@ -25,3 +25,21 @@ module.exports.register = async (req,res,next) => {
         return res.send(error)
     }   
 }
+
+module.exports.login = async (req, res, next) => {
+    try {
+        const { name, password } = req.body;
+        const User = await Users.findOne({ username: name })
+        if (!User){
+            return res.json({ msg: "Username or password is invalid. ", status: false })
+        }
+        let comparePwd = await bcrypt.compare(password, User.password)
+        if(!comparePwd){
+            return res.json({ msg: "Username or password is invalid. ", status: false })
+        }
+        delete User.password;
+        return res.json({ status: true, User })
+    } catch (error) {
+        return res.send(error)
+    }
+}

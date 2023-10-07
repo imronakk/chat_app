@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 import axios from 'axios'
 
@@ -10,6 +10,7 @@ import { registerRoute } from '../utils/APIRoutes';
 
 const Register = () => {
 
+  const navigate = useNavigate();
   const [value, setValue] = useState({
     name: "",
     email: "",
@@ -39,6 +40,7 @@ const Register = () => {
       }
       if(data.status === true){
         localStorage.setItem('chat-app-user', JSON.stringify(data.user))
+        navigate('/')
       }
     }
   }
