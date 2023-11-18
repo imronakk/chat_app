@@ -36,6 +36,7 @@ const Login = () => {
                 return toast.error(data.msg, toastOptions)
             }
             if (data.status === true) {
+                  console.log(data.user)
                 localStorage.setItem('chat-app-user', JSON.stringify(data.user))
                 navigate('/')
             }
@@ -56,6 +57,12 @@ const Login = () => {
         }
     }
 
+    useEffect(() => {
+      if (localStorage.getItem('chat-app-user')) {
+        navigate('/')
+      }
+    }, [])
+    
 
     const handleChange = (e) => {
         setValue({ ...value, [e.target.name]: e.target.value });
