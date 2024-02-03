@@ -30,21 +30,21 @@ const Register = () => {
     if (localStorage.getItem('chat-app-user')) {
       navigate('/')
     }
-  }, [])
-  
+  }, [navigate])
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(handleValidation()){
+    if (handleValidation()) {
       const { name, email, password, confirmpwd } = value;
-      const {data} = await axios.post(registerRoute,{
+      const { data } = await axios.post(registerRoute, {
         name,
         email,
         password
       })
-      if(data.status === false){
-        return toast.error(data.msg , toastOptions)
+      if (data.status === false) {
+        return toast.error(data.msg, toastOptions)
       }
-      if(data.status === true){
+      if (data.status === true) {
         localStorage.setItem('chat-app-user', JSON.stringify(data.user))
         navigate('/')
       }
@@ -66,8 +66,8 @@ const Register = () => {
     } else if (password.length < 5) {
       toast.error("Password should be greater than 5 characters. ", toastOptions);
       return false;
-    }else{
-    return true;
+    } else {
+      return true;
     }
   }
 
@@ -83,7 +83,7 @@ const Register = () => {
 
           <div className="brand">
             <img src={logo} alt="" />
-            <h1>Ronak</h1>
+            <h1>APP</h1>
           </div>
 
           <input type='text' placeholder='Username' name='name' onChange={(e) => handleChange(e)} />

@@ -10,84 +10,83 @@ import { loginRoute } from '../utils/APIRoutes';
 
 const Login = () => {
 
-    const navigate = useNavigate();
-    const [value, setValue] = useState({
-        name: "",
-        password: ""
-    });
+  const navigate = useNavigate();
+  const [value, setValue] = useState({
+    name: "",
+    password: ""
+  });
 
-    const toastOptions = {
-        position: 'bottom-right',
-        autoClose: 8000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: 'dark'
-    }
+  const toastOptions = {
+    position: 'bottom-right',
+    autoClose: 8000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: 'dark'
+  }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (handleValidation()) {
-            const { name, password } = value;
-            const { data } = await axios.post(loginRoute, {
-                name,
-                password
-            })
-            if (data.status === false) {
-                return toast.error(data.msg, toastOptions)
-            }
-            if (data.status === true) {
-                  console.log(data.user)
-                localStorage.setItem('chat-app-user', JSON.stringify(data.user))
-                navigate('/')
-            }
-        }
-    }
-
-    const handleValidation = () => {
-        const { name, password} = value;
-
-        if (password === '') {
-            toast.error("Username and password are required. ", toastOptions);
-            return false;
-        } else if (name === '') {
-            toast.error("Username and password are required. ", toastOptions);
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    useEffect(() => {
-      if (localStorage.getItem('chat-app-user')) {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (handleValidation()) {
+      const { name, password } = value;
+      const { data } = await axios.post(loginRoute, {
+        name,
+        password
+      })
+      if (data.status === false) {
+        return toast.error(data.msg, toastOptions)
+      }
+      if (data.status === true) {
+        localStorage.setItem('chat-app-user', JSON.stringify(data.user))
         navigate('/')
       }
-    }, [])
-    
-
-    const handleChange = (e) => {
-        setValue({ ...value, [e.target.name]: e.target.value });
     }
+  }
 
-    return (
-        <>
-            <FormContainer>
-                <form action="" onSubmit={(e) => handleSubmit(e)}>
+  const handleValidation = () => {
+    const { name, password } = value;
 
-                    <div className="brand">
-                        <img src={logo} alt="" />
-                        <h1>Ronak</h1>
-                    </div>
+    if (password === '') {
+      toast.error("Username and password are required. ", toastOptions);
+      return false;
+    } else if (name === '') {
+      toast.error("Username and password are required. ", toastOptions);
+      return false;
+    } else {
+      return true;
+    }
+  }
 
-                    <input type='text' placeholder='Username' name='name' onChange={(e) => handleChange(e)} />
-                    <input type='password' placeholder='password' name='password' onChange={(e) => handleChange(e)} />
+  useEffect(() => {
+    if (localStorage.getItem('chat-app-user')) {
+      navigate('/')
+    }
+  }, [navigate])
 
-                    <button type='submit'>Login </button>
-                    <span>Don't Have an Account ? <Link to="/register">Regsiter</Link></span>
-                </form>
-            </FormContainer>
-            <ToastContainer />
-        </>
-    )
+
+  const handleChange = (e) => {
+    setValue({ ...value, [e.target.name]: e.target.value });
+  }
+
+  return (
+    <>
+      <FormContainer>
+        <form action="" onSubmit={(e) => handleSubmit(e)}>
+
+          <div className="brand">
+            <img src={logo} alt="" />
+            <h1>Chat App</h1>
+          </div>
+
+          <input type='text' placeholder='Username' name='name' onChange={(e) => handleChange(e)} />
+          <input type='password' placeholder='password' name='password' onChange={(e) => handleChange(e)} />
+
+          <button type='submit'>Login </button>
+          <span>Don't Have an Account ? <Link to="/register">Regsiter</Link></span>
+        </form>
+      </FormContainer>
+      <ToastContainer />
+    </>
+  )
 }
 
 const FormContainer = styled.div`

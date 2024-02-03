@@ -6,6 +6,7 @@ import Login from './pages/Login'
 import Chat from './pages/Chat'
 import SetAvatar from './pages/SetAvatar'
 
+
 const App = () => {
   return (
     <Router>
@@ -15,7 +16,7 @@ const App = () => {
         <Route path='/setAvatar' element={<SetAvatar />} />
         <Route path='/' element={<Chat />} />
       </Routes>
-    </Router>
+    </Router> 
   )
 }
 
